@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "cypress": "^14.3.2"
+  },
+  "dependencies": {
+    "via-2025-web-aut-juice": "file:"
   }
 }
