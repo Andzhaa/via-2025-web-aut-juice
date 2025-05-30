@@ -44,5 +44,36 @@ export class HomePage extends BasePage {
   static get closeButton() {
     return cy.get("button[aria-label='Close Dialog']");
   }
+
+  static get expandReview() {
+    return cy.get("[aria-label='Expand for Reviews']")
+  }
+
+  static get writeInReview() {
+    return cy.get("[aria-label='Text field to review a product']")
+  }
+
+  static get submitButton() {
+    return cy.get("button#submitButton")
+  }
  
+  static get cardQuantity() {
+    return cy.get(".mat-mdc-select")
+  }
+
+  static get openCardQuantity() {
+    return cy.get(".mat-mdc-paginator-touch-target")
+  }
+
+  static get chooseCardQuantity() {
+    return cy.get("[role=option]")
+  }
+
+  static get addToBasket() {
+    return cy.get("[aria-label='Add to Basket']")
+  }
+
+  static get myBasket() {
+    return cy.get("[aria-label='Show the shopping cart']")
+  }
 }

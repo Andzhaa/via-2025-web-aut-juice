@@ -1,6 +1,10 @@
+import { BasketPage } from "../pageObjects/BasketPage";
+import { DeliveryMethodPage } from "../pageObjects/DeliveryMethodPage";
 import { HomePage } from "../pageObjects/HomePage";
 import { LoginPage } from "../pageObjects/LoginPage";
+import { PaymentOptionsPage } from "../pageObjects/PaymentOptionsPage";
 import { RegistrationPage } from "../pageObjects/RegistrationPage";
+import { SelectAddressPage } from "../pageObjects/SelectAddressPage";
 
 describe("Juice-shop scenarios", () => {
   context("Without auto login", () => {
@@ -85,83 +89,121 @@ describe("Juice-shop scenarios", () => {
     it("Search 500ml and validate Lemon, while having multiple cards", () => {
     // Create scenario - Search 500ml and validate Lemon, while having multiple cards
     // Click on search icon
-    HomePage.searchIcon.click();
+      HomePage.searchIcon.click();
     // Search for 500ml
-    HomePage.searchField.type("500ml{enter}");
+      HomePage.searchField.type("500ml{enter}");
     // Select a product card - Lemon Juice (500ml)
-    HomePage.productBox.contains("Lemon Juice (500ml)").click();
+      HomePage.productBox.contains("Lemon Juice (500ml)").click();
     // Validate that the card (should) contains "Sour but full of vitamins."
-    HomePage.productInfo.should("contain.text", "Sour but full of vitamins.");      
+      HomePage.productInfo.should("contain.text", "Sour but full of vitamins.");      
     });
 
-    it.only("Search 500ml and validate cards", () => {
+    it("Search 500ml and validate cards", () => {
     // Create scenario - Search 500ml and validate cards
     // Click on search icon
-    HomePage.searchIcon.click();
+      HomePage.searchIcon.click();
     // Search for 500ml
-    HomePage.searchField.type("500ml{enter}");
+      HomePage.searchField.type("500ml{enter}");
     // Select a product card - Eggfruit Juice (500ml)
-    HomePage.productBox.contains("Eggfruit Juice (500ml)").click();
+      HomePage.productBox.contains("Eggfruit Juice (500ml)").click();
     // Validate that the card (should) contains "Now with even more exotic flavour."
-    HomePage.productInfo.should("contain.text", "Now with even more exotic flavour.");
+      HomePage.productInfo.should("contain.text", "Now with even more exotic flavour.");
     // Close the card
-    HomePage.closeButton.click();
+      HomePage.closeButton.click();
     // Select a product card - Lemon Juice (500ml)
-    HomePage.productBox.contains("Lemon Juice (500ml)").click();
+      HomePage.productBox.contains("Lemon Juice (500ml)").click();
     // Validate that the card (should) contains "Sour but full of vitamins."
-    HomePage.productInfo.should("contain.text", "Sour but full of vitamins.");
+      HomePage.productInfo.should("contain.text", "Sour but full of vitamins.");
     // Close the card
-    HomePage.closeButton.click();
+      HomePage.closeButton.click();
     // Select a product card - Strawberry Juice (500ml)
-    HomePage.productBox.contains("Strawberry Juice (500ml)").click();
+      HomePage.productBox.contains("Strawberry Juice (500ml)").click();
     // Validate that the card (should) contains "Sweet & tasty!"
-    HomePage.productInfo.should("contain.text", "Sweet & tasty!");      
+      HomePage.productInfo.should("contain.text", "Sweet & tasty!");      
     });
 
-
+    it("Read a review", () => {
     // Create scenario - Read a review
     // Click on search icon
+      HomePage.searchIcon.click();
     // Search for King
+      HomePage.searchField.type("King{enter}");
     // Select a product card - OWASP Juice Shop "King of the Hill" Facemask
+      HomePage.productBox.contains("King of the Hill").click();
     // Click expand reviews button/icon (wait for reviews to appear)
-    // Validate review - K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!
+      HomePage.expandReview.click();
+    // Validate review - K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!  
+      HomePage.expandReview.should("contain.text", "K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!");    
+    });
 
+    it("Add a review", () => {
     // Create scenario - Add a review
     // Click on search icon
+      HomePage.searchIcon.click();
     // Search for Raspberry
+      HomePage.searchField.type("Raspberry{enter}");
     // Select a product card - Raspberry Juice (1000ml)
+      HomePage.productBox.contains("Raspberry Juice (1000ml)").click();
     // Type in review - "Tastes like metal"
+      HomePage.writeInReview.click();
+      HomePage.writeInReview.type("Tastes like metal");
     // Click Submit
+      HomePage.submitButton.click();
     // Click expand reviews button/icon (wait for reviews to appear)
-    // Validate review -  "Tastes like metal"
+      HomePage.expandReview.click();
+    // Validate review -  "Tastes like metal"   
+      HomePage.expandReview.should("contain.text", "Tastes like metal");   
+    });
 
+    it("Validate product card amount", () => {
     // Create scenario - Validate product card amount
     // Validate that the default amount of cards is 12
+      HomePage.cardQuantity.should("contain.text", "12");
     // Change items per page (at the bottom of page) to 24
+      HomePage.openCardQuantity.click();
+      HomePage.chooseCardQuantity.contains("24").click();
     // Validate that the amount of cards is 24
+      HomePage.cardQuantity.should("contain.text", "24");
     // Change items per page (at the bottom of page) to 36
-    // Validate that the amount of cards is 35
+      HomePage.openCardQuantity.click();
+      HomePage.chooseCardQuantity.contains("36").click();
+    // Validate that the amount of cards is 36
+      HomePage.cardQuantity.should("contain.text", "36");    
+    });
 
+    it.only("Buy Girlie T-shirt", () => {
     // Create scenario - Buy Girlie T-shirt
     // Click on search icon
+      HomePage.searchIcon.click();
     // Search for Girlie
+      HomePage.searchField.type("Girlie{enter}");
     // Add to basket "Girlie"
+      //HomePage.addToBasket.click();
     // Click on "Your Basket" button
+      HomePage.myBasket.click();
     // Create page object - BasketPage
     // Click on "Checkout" button
+      BasketPage.checkoutButton.click();
     // Create page object - SelectAddressPage
     // Select address containing "United Fakedom"
+      SelectAddressPage.chooseAddress.contains("United Fakedom").click();
     // Click Continue button
+      SelectAddressPage.proceedToPayment.click();
     // Create page object - DeliveryMethodPage
     // Select delivery speed Standard Delivery
+      DeliveryMethodPage.chooseDeliverySpeed.contains("Standard Delivery").click();
     // Click Continue button
+      DeliveryMethodPage.proceedToPayment.click();
     // Create page object - PaymentOptionsPage
     // Select card that ends with "5678"
+      PaymentOptionsPage.chooseCard.contains("5678").click('left');
     // Click Continue button
     // Create page object - OrderSummaryPage
     // Click on "Place your order and pay"
     // Create page object - OrderCompletionPage
-    // Validate confirmation - "Thank you for your purchase!"
+    // Validate confirmation - "Thank you for your purchase!"      
+    });
+
 
     // Create scenario - Add address
     // Click on Account
