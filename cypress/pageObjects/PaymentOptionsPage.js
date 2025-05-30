@@ -6,6 +6,11 @@ export class PaymentOptionsPage extends BasePage {
     }
 
     static get chooseCard() {
-        return cy.get("mat-row[role=row]")
+        return cy.get("mat-cell");
     }
+
+    static get proceedToReview() {
+        return cy.get("[aria-label='Proceed to review']");
+    }
+
 }

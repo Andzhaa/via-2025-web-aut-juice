@@ -1,9 +1,14 @@
 import { BasketPage } from "../pageObjects/BasketPage";
+import { CreateAddressPage } from "../pageObjects/CreateAddressPage";
 import { DeliveryMethodPage } from "../pageObjects/DeliveryMethodPage";
 import { HomePage } from "../pageObjects/HomePage";
 import { LoginPage } from "../pageObjects/LoginPage";
+import { OrderCompletionPage } from "../pageObjects/OrderCompletionPage";
+import { OrderSummaryPage } from "../pageObjects/OrderSummaryPage";
 import { PaymentOptionsPage } from "../pageObjects/PaymentOptionsPage";
 import { RegistrationPage } from "../pageObjects/RegistrationPage";
+import { SavedAddressesPage } from "../pageObjects/SavedAddressesPage";
+import { SavedPaymentMethodsPage } from "../pageObjects/SavedPaymentMethodsPage";
 import { SelectAddressPage } from "../pageObjects/SelectAddressPage";
 
 describe("Juice-shop scenarios", () => {
@@ -171,7 +176,7 @@ describe("Juice-shop scenarios", () => {
       HomePage.cardQuantity.should("contain.text", "36");    
     });
 
-    it.only("Buy Girlie T-shirt", () => {
+    it("Buy Girlie T-shirt", () => {
     // Create scenario - Buy Girlie T-shirt
     // Click on search icon
       HomePage.searchIcon.click();
@@ -196,37 +201,70 @@ describe("Juice-shop scenarios", () => {
       DeliveryMethodPage.proceedToPayment.click();
     // Create page object - PaymentOptionsPage
     // Select card that ends with "5678"
-      PaymentOptionsPage.chooseCard.contains("5678").click('left');
+      PaymentOptionsPage.chooseCard.contains("5678").siblings().children("mat-radio-button").click();
     // Click Continue button
+      PaymentOptionsPage.proceedToReview.click();
     // Create page object - OrderSummaryPage
     // Click on "Place your order and pay"
+      OrderSummaryPage.placeOrder.click();
     // Create page object - OrderCompletionPage
-    // Validate confirmation - "Thank you for your purchase!"      
+    // Validate confirmation - "Thank you for your purchase!"  
+      OrderCompletionPage.orderConfirmation.should("contain.text","Thank you for your purchase!");    
     });
 
 
     // Create scenario - Add address
+    it("Add address", () => {
     // Click on Account
+      HomePage.accountButton.click();
     // Click on Orders & Payment
+      HomePage.ordersAndPayment.click();
     // Click on My saved addresses
+      HomePage.savedAdresses.click();
     // Create page object - SavedAddressesPage
     // Click on Add New Address
+      SavedAddressesPage.newAdress.click();
     // Create page object - CreateAddressPage
     // Fill in the necessary information
+      const randomNumber = Math.floor(Math.random() * 10000000);
+      const randomAddressNumber = Math.floor(Math.random() * 100);
+      const randomAdress = `Terbatas iela ${randomAddressNumber}`;
+      CreateAddressPage.getCountryField.type("Latvia");
+      CreateAddressPage.getNameField.type("Janka");
+      CreateAddressPage.getMobileNumberField.type(randomNumber);
+      CreateAddressPage.getZipCodeField.type("LV-1234");
+      CreateAddressPage.getAddressField.type(randomAdress);
+      CreateAddressPage.getCityField.type("Valmiera");
     // Click Submit button
+      CreateAddressPage.submitButton.click();
     // Validate that previously added address is visible
+      CreateAddressPage.seekAddress.should("contain", randomAdress);
+    });
 
     // Create scenario - Add payment option
+    it.only("Add payment option", () => {
     // Click on Account
+      HomePage.accountButton.click();
     // Click on Orders & Payment
+      HomePage.ordersAndPayment.click();
     // Click on My payment options
+      HomePage.paymentOptions.click();
     // Create page object - SavedPaymentMethodsPage
     // Click Add new card
+      SavedPaymentMethodsPage.newCardForm.click();
     // Fill in Name
+      SavedPaymentMethodsPage.getNameField.type("Janka");
     // Fill in Card Number
+      SavedPaymentMethodsPage.getCardNumberField.type(5573682012341234);
     // Set expiry month to 7
+      SavedPaymentMethodsPage.getExpiryMonth.select('7');
     // Set expiry year to 2090
+      SavedPaymentMethodsPage.getExpiryYear.select('2090');
     // Click Submit button
+      SavedPaymentMethodsPage.submitButton.click();
     // Validate that the card shows up in the list
+      SavedPaymentMethodsPage.savedCards.should("contain.text", "Janka").should("contain.text", "7/2090");
+    });
+
   });
 });
